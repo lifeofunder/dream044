@@ -33,6 +33,8 @@
             padding: 0;
             box-sizing: border-box;
             font-family: var(--font-body);
+            -webkit-tap-highlight-color: transparent;
+            tap-highlight-color: transparent;
         }
 
         html {
@@ -99,12 +101,20 @@
             text-decoration: none;
             text-align: center;
             box-shadow: var(--shadow);
+            touch-action: manipulation;
         }
 
         .btn:hover {
             background-color: var(--accent-warm);
             color: var(--bg-dark);
             transform: translateY(-3px);
+        }
+        .btn:active {
+            transform: translateY(0) scale(0.97);
+            transition-duration: 0.1s;
+        }
+        .btn:hover:active {
+            transform: translateY(-2px) scale(0.98);
         }
 
         /* === Шапка и навигация === */
@@ -136,6 +146,11 @@
             text-decoration: none;
             display: flex;
             align-items: center;
+            -webkit-tap-highlight-color: transparent;
+            transition: var(--transition);
+        }
+        .logo:active {
+            opacity: 0.85;
         }
         .logo i { margin-right: 10px; color: var(--accent-caramel);}
 
@@ -170,20 +185,95 @@
             background-color: var(--accent-caramel);
             transition: var(--transition);
         }
+        .nav-links a {
+            -webkit-tap-highlight-color: transparent;
+        }
+        .nav-links a:active {
+            opacity: 0.85;
+        }
 
         .mobile-toggle {
             display: none;
             font-size: 1.5rem;
             cursor: pointer;
             color: var(--text-primary);
+            -webkit-tap-highlight-color: transparent;
+            transition: var(--transition);
+        }
+        .mobile-toggle:active {
+            transform: scale(0.92);
+            opacity: 0.85;
+        }
+
+        /* Соцсети в шапке */
+        .header-social {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .header-social a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 38px;
+            height: 38px;
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--text-muted);
+            border-radius: 50%;
+            font-size: 1rem;
+            transition: var(--transition);
+            text-decoration: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .header-social a:hover {
+            background: var(--accent-caramel);
+            color: var(--white);
+            transform: translateY(-2px);
+        }
+        .header-social a:active {
+            transform: scale(0.92);
         }
 
         /* === Герой-секция === */
         .hero {
+            position: relative;
             padding-top: 180px;
             padding-bottom: 110px;
-            background: linear-gradient(180deg, rgba(26, 29, 26, 0.75) 0%, rgba(26, 29, 26, 0.95) 55%), url('https://images.unsplash.com/photo-1498804103079-a6351b050096?ixlib=rb-4.0.3&auto=format&fit=crop&w=1967&q=80') no-repeat center center/cover;
             text-align: center;
+            overflow: hidden;
+        }
+        /* Анимированный размытый фон */
+        .hero-bg {
+            position: absolute;
+            inset: -20%;
+            z-index: 0;
+            background-image:
+                url('https://images.unsplash.com/photo-1498804103079-a6351b050096?ixlib=rb-4.0.3&auto=format&fit=crop&w=1967&q=80'),
+                radial-gradient(ellipse 80% 50% at 20% 40%, rgba(193, 125, 82, 0.25), transparent),
+                radial-gradient(ellipse 60% 80% at 80% 60%, rgba(45, 74, 62, 0.3), transparent),
+                radial-gradient(ellipse 100% 100% at 50% 50%, rgba(26, 29, 26, 0.2), transparent);
+            background-size: 120% 120%, 100% 100%, 100% 100%, 100% 100%;
+            background-position: 0% 0%, 0 0, 0 0, 0 0;
+            background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
+            filter: blur(14px);
+            -webkit-filter: blur(14px);
+            animation: heroBgMove 25s ease-in-out infinite alternate;
+        }
+        @keyframes heroBgMove {
+            0% { background-position: 0% 0%, 0% 0%, 0% 0%, 0% 0%; transform: scale(1.05); }
+            50% { background-position: 30% 15%, 10% 10%, -5% 5%, 0% 0%; transform: scale(1.08); }
+            100% { background-position: -20% -10%, -10% -5%, 15% 10%, 0% 0%; transform: scale(1.05); }
+        }
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            background: linear-gradient(180deg, rgba(26, 29, 26, 0.72) 0%, rgba(26, 29, 26, 0.88) 50%, rgba(26, 29, 26, 0.95) 100%);
+            pointer-events: none;
+        }
+        .hero .container {
+            position: relative;
+            z-index: 2;
         }
 
         .hero h1 {
@@ -260,6 +350,10 @@
             aspect-ratio: 1;
             box-shadow: var(--shadow);
             cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .gallery-item:active img {
+            transform: scale(1.03);
         }
         .gallery-item:nth-child(1) { grid-column: span 2; grid-row: span 2; aspect-ratio: auto; }
         .gallery-item img {
@@ -339,6 +433,13 @@
         .lightbox-close:hover {
             background: var(--accent-caramel);
         }
+        .lightbox-close {
+            -webkit-tap-highlight-color: transparent;
+        }
+        .lightbox-close:active {
+            transform: scale(0.9);
+            background: var(--accent-caramel);
+        }
         @media (max-width: 992px) {
             .gallery-grid { grid-template-columns: repeat(2, 1fr); }
             .gallery-item:nth-child(1) { grid-column: span 2; grid-row: span 1; aspect-ratio: 1; }
@@ -370,11 +471,16 @@
             cursor: pointer;
             transition: var(--transition);
             font-weight: 500;
+            touch-action: manipulation;
         }
         .cat-btn.active, .cat-btn:hover {
             background-color: var(--accent-caramel);
             color: var(--white);
             border-color: var(--accent-caramel);
+        }
+        .cat-btn:active {
+            transform: scale(0.96);
+            transition-duration: 0.1s;
         }
 
         .menu-items {
@@ -396,6 +502,13 @@
         .menu-card:hover {
             transform: translateY(-8px);
             box-shadow: var(--shadow-hover);
+        }
+        .menu-card {
+            -webkit-tap-highlight-color: transparent;
+        }
+        .menu-card:active {
+            transform: translateY(-4px) scale(0.99);
+            transition-duration: 0.1s;
         }
 
         .menu-card h3 {
@@ -435,6 +548,12 @@
         }
         .menu-card-img img:hover {
             transform: scale(1.03);
+        }
+        .menu-card-img {
+            -webkit-tap-highlight-color: transparent;
+        }
+        .menu-card-img:active img {
+            transform: scale(1.02);
         }
         .menu-card-img .menu-card-zoom {
             position: absolute;
@@ -521,6 +640,13 @@
             background-color: var(--accent-caramel);
             transform: translateY(-5px);
         }
+        .social-links a {
+            -webkit-tap-highlight-color: transparent;
+        }
+        .social-links a:active {
+            transform: translateY(-2px) scale(0.92);
+            transition-duration: 0.1s;
+        }
 
         .map-container {
             border-radius: 12px;
@@ -573,6 +699,12 @@
             color: var(--accent-caramel);
             padding-left: 5px;
         }
+        .footer-links a {
+            -webkit-tap-highlight-color: transparent;
+        }
+        .footer-links a:active {
+            opacity: 0.85;
+        }
 
         .footer-hours p {
             color: var(--text-muted);
@@ -596,6 +728,13 @@
 
         @media (max-width: 768px) {
             .mobile-toggle { display: block; }
+            .header-social-desktop { display: none !important; }
+            .nav-social-mobile {
+                padding: 20px 0 10px;
+                border-top: 1px solid rgba(255,255,255,0.08);
+                margin-top: 10px;
+            }
+            .nav-social-mobile .header-social { justify-content: center; }
             .nav-links {
                 position: fixed;
                 top: 70px;
@@ -645,6 +784,10 @@
                     <li><a href="#gallery">Галерея</a></li>
                     <li><a href="#menu">Меню</a></li>
                     <li><a href="#contacts">Контакты</a></li>
+                    <li class="nav-social-mobile"><div class="header-social">
+                        <a href="https://vk.com/cofferoom44" target="_blank" rel="noopener" aria-label="ВКонтакте"><i class="fab fa-vk"></i></a>
+                        <a href="https://t.me/cofferoom44" target="_blank" rel="noopener" aria-label="Telegram"><i class="fab fa-telegram"></i></a>
+                    </div></li>
                 </ul>
             </div>
         </nav>
@@ -652,6 +795,8 @@
 
     <!-- Главная герой-секция -->
     <section class="hero" id="home">
+        <div class="hero-bg" aria-hidden="true"></div>
+        <div class="hero-overlay" aria-hidden="true"></div>
         <div class="container">
             <h1>Ваш уютный уголок в центре Костромы</h1>
             <p>Место, где рождается лучший кофе, где можно поработать, встретиться с друзьями или просто насладиться моментом. Добро пожаловать в КОФЕРУМ на Советской, 40.</p>
