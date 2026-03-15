@@ -6,26 +6,25 @@
     <title>КОФЕРУМ — Уютная кофейня в центре Костромы</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Nunito+Sans:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* === Тёмная палитра в духе интерьера и фото === */
+        /* Единый стиль: фон GrainGradient по промпту (colorBack black, colors orange/yellow/pink, overlay bg-black/20) */
         :root {
-            --bg-dark: #1a1d1a;
-            --bg-card: #232823;
-            --bg-section: #1e221e;
-            --green-dark: #1e3329;
-            --green-accent: #2d4a3e;
-            --accent-caramel: #c17d52;
-            --accent-warm: #d4a574;
-            --text-primary: #f0ebe3;
-            --text-muted: #a8a39b;
+            --bg-dark: rgba(0, 0, 0, 0.2);
+            --bg-card: rgba(255, 255, 255, 0.08);
+            --bg-section: rgba(0, 0, 0, 0.15);
+            --accent: #2dd4bf;
+            --accent-dark: #14b8a6;
+            --accent-light: #5eead4;
+            --text-primary: #f1f5f9;
+            --text-muted: rgba(255, 255, 255, 0.82);
             --white: #ffffff;
-            --shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
-            --shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.45);
-            --transition: all 0.35s ease;
-            --font-heading: 'Cormorant Garamond', Georgia, serif;
-            --font-body: 'Nunito Sans', 'Segoe UI', system-ui, sans-serif;
+            --shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+            --shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.4);
+            --transition: all 0.3s ease;
+            --font-heading: 'Montserrat', sans-serif;
+            --font-body: 'Manrope', 'Segoe UI', system-ui, sans-serif;
         }
 
         * {
@@ -41,8 +40,37 @@
             scroll-behavior: smooth;
         }
 
+        /* Фон по промпту: GrainGradient — colorBack black, colors hsl(14,100%,57%) / hsl(45,100%,51%) / hsl(340,82%,52%), shape corners, intensity 0.45 */
+        .site-bg {
+            position: fixed;
+            inset: 0;
+            z-index: -3;
+            background:
+                radial-gradient(ellipse 120% 100% at 0% 0%, hsla(14, 100%, 57%, 0.45), transparent 55%),
+                radial-gradient(ellipse 100% 120% at 100% 0%, hsla(45, 100%, 51%, 0.45), transparent 55%),
+                radial-gradient(ellipse 110% 100% at 100% 100%, hsla(340, 82%, 52%, 0.45), transparent 50%),
+                radial-gradient(ellipse 100% 110% at 0% 100%, hsla(14, 100%, 57%, 0.25), transparent 50%),
+                hsl(0, 0%, 0%);
+            pointer-events: none;
+        }
+        .site-grain {
+            position: fixed;
+            inset: 0;
+            z-index: -2;
+            opacity: 0;
+            pointer-events: none;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        }
+        .site-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background: rgba(0, 0, 0, 0.2);
+            pointer-events: none;
+        }
+
         body {
-            background-color: var(--bg-dark);
+            background: transparent;
             color: var(--text-primary);
             line-height: 1.6;
         }
@@ -76,7 +104,7 @@
             transform: translateX(-50%);
             width: 60px;
             height: 4px;
-            background: linear-gradient(90deg, transparent, var(--accent-caramel), transparent);
+            background: var(--accent-light);
             border-radius: 2px;
         }
         h3 { font-size: 1.5rem; }
@@ -89,13 +117,13 @@
 
         .btn {
             display: inline-block;
-            padding: 15px 35px;
-            background-color: var(--accent-caramel);
+            padding: 14px 32px;
+            background-color: var(--accent);
             color: var(--white);
             border: none;
-            border-radius: 50px;
+            border-radius: 8px;
             font-weight: 600;
-            font-size: 1.1rem;
+            font-size: 1rem;
             cursor: pointer;
             transition: var(--transition);
             text-decoration: none;
@@ -105,9 +133,9 @@
         }
 
         .btn:hover {
-            background-color: var(--accent-warm);
-            color: var(--bg-dark);
-            transform: translateY(-3px);
+            background-color: var(--accent-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
         }
         .btn:active {
             transform: translateY(0) scale(0.97);
@@ -117,20 +145,24 @@
             transform: translateY(-2px) scale(0.98);
         }
 
-        /* === Шапка и навигация === */
+        /* === Шапка === */
         header {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
-            background: rgba(26, 29, 26, 0.92);
+            background: rgba(0, 0, 0, 0.4);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            box-shadow: 0 1px 0 rgba(255, 255, 255, 0.06);
+            box-shadow: 0 1px 0 rgba(255, 255, 255, 0.08);
             z-index: 1000;
-            padding: 16px 0;
+            padding: 14px 0;
             transition: var(--transition);
         }
+        header .logo { color: #fff; }
+        header .nav-links a { color: rgba(255, 255, 255, 0.85); }
+        header .nav-links a:hover, header .nav-links a.active { color: var(--accent-light); }
+        header .mobile-toggle { color: #fff; }
 
         nav .container {
             display: flex;
@@ -152,7 +184,7 @@
         .logo:active {
             opacity: 0.85;
         }
-        .logo i { margin-right: 10px; color: var(--accent-caramel);}
+        .logo i { margin-right: 10px; color: var(--accent);}
 
         .nav-links {
             display: flex;
@@ -170,7 +202,7 @@
         }
 
         .nav-links a:hover, .nav-links a.active {
-            color: var(--accent-warm);
+            color: var(--accent);
         }
         .nav-links a:hover:after, .nav-links a.active:after {
             width: 100%;
@@ -182,7 +214,7 @@
             left: 0;
             width: 0;
             height: 2px;
-            background-color: var(--accent-caramel);
+            background-color: var(--accent);
             transition: var(--transition);
         }
         .nav-links a {
@@ -217,16 +249,16 @@
             justify-content: center;
             width: 38px;
             height: 38px;
-            background: rgba(255, 255, 255, 0.08);
-            color: var(--text-muted);
-            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.12);
+            color: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
             font-size: 1rem;
             transition: var(--transition);
             text-decoration: none;
             -webkit-tap-highlight-color: transparent;
         }
         .header-social a:hover {
-            background: var(--accent-caramel);
+            background: var(--accent);
             color: var(--white);
             transform: translateY(-2px);
         }
@@ -234,77 +266,52 @@
             transform: scale(0.92);
         }
 
-        /* === Герой-секция === */
+        /* === Герой — контент поверх глобального градиента === */
         .hero {
             position: relative;
-            padding-top: 180px;
-            padding-bottom: 110px;
+            padding-top: 160px;
+            padding-bottom: 100px;
             text-align: center;
             overflow: hidden;
-        }
-        /* Анимированный размытый фон */
-        .hero-bg {
-            position: absolute;
-            inset: -20%;
-            z-index: 0;
-            background-image:
-                url('https://images.unsplash.com/photo-1498804103079-a6351b050096?ixlib=rb-4.0.3&auto=format&fit=crop&w=1967&q=80'),
-                radial-gradient(ellipse 80% 50% at 20% 40%, rgba(193, 125, 82, 0.25), transparent),
-                radial-gradient(ellipse 60% 80% at 80% 60%, rgba(45, 74, 62, 0.3), transparent),
-                radial-gradient(ellipse 100% 100% at 50% 50%, rgba(26, 29, 26, 0.2), transparent);
-            background-size: 120% 120%, 100% 100%, 100% 100%, 100% 100%;
-            background-position: 0% 0%, 0 0, 0 0, 0 0;
-            background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
-            filter: blur(14px);
-            -webkit-filter: blur(14px);
-            animation: heroBgMove 25s ease-in-out infinite alternate;
-        }
-        @keyframes heroBgMove {
-            0% { background-position: 0% 0%, 0% 0%, 0% 0%, 0% 0%; transform: scale(1.05); }
-            50% { background-position: 30% 15%, 10% 10%, -5% 5%, 0% 0%; transform: scale(1.08); }
-            100% { background-position: -20% -10%, -10% -5%, 15% 10%, 0% 0%; transform: scale(1.05); }
-        }
-        .hero-overlay {
-            position: absolute;
-            inset: 0;
-            z-index: 1;
-            background: linear-gradient(180deg, rgba(26, 29, 26, 0.72) 0%, rgba(26, 29, 26, 0.88) 50%, rgba(26, 29, 26, 0.95) 100%);
-            pointer-events: none;
+            background: transparent;
         }
         .hero .container {
             position: relative;
-            z-index: 2;
+            z-index: 1;
         }
 
         .hero h1 {
-            font-size: 3.8rem;
+            font-size: 3.2rem;
             margin-bottom: 20px;
-            color: var(--text-primary);
-            text-shadow: 0 2px 12px rgba(0,0,0,0.4);
+            color: #fff;
+            letter-spacing: -0.03em;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
         }
 
         .hero p {
-            font-size: 1.25rem;
-            max-width: 720px;
-            margin: 0 auto 40px;
-            color: var(--text-muted);
-            line-height: 1.7;
+            font-size: 1.15rem;
+            max-width: 680px;
+            margin: 0 auto 36px;
+            color: rgba(255, 255, 255, 0.92);
+            line-height: 1.75;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
         }
 
         .hero-btns {
             display: flex;
-            gap: 20px;
+            gap: 16px;
             justify-content: center;
             flex-wrap: wrap;
         }
+        .hero-btns .btn { box-shadow: 0 4px 14px rgba(0,0,0,0.25); }
         .hero-btns .btn:last-child {
             background-color: transparent;
-            color: var(--accent-warm);
-            border: 2px solid var(--accent-caramel);
+            color: #fff;
+            border: 2px solid rgba(255,255,255,0.9);
         }
         .hero-btns .btn:last-child:hover {
-            background-color: var(--accent-caramel);
-            color: var(--white);
+            background-color: rgba(255,255,255,0.95);
+            color: #0d9488;
         }
 
         /* === Секция "О нас" === */
@@ -316,7 +323,7 @@
         }
 
         .about {
-            background-color: var(--bg-section);
+            background: var(--bg-section);
         }
         .about-img {
             border-radius: 12px;
@@ -335,7 +342,7 @@
 
         /* === Галерея === */
         .gallery {
-            background: linear-gradient(180deg, var(--bg-card) 0%, var(--bg-section) 100%);
+            background: var(--bg-section);
         }
         .gallery-grid {
             display: grid;
@@ -370,7 +377,7 @@
             content: '';
             position: absolute;
             inset: 0;
-            background: linear-gradient(180deg, transparent 50%, rgba(26, 29, 26, 0.4) 100%);
+            background: linear-gradient(180deg, transparent 50%, rgba(0, 0, 0, 0.25) 100%);
             opacity: 0;
             transition: var(--transition);
         }
@@ -382,16 +389,17 @@
             transform: translate(-50%, -50%) scale(0.8);
             width: 48px;
             height: 48px;
-            background: rgba(255,255,255,0.9);
-            border-radius: 50%;
+            background: var(--white);
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--bg-dark);
+            color: var(--accent);
             font-size: 1.2rem;
             opacity: 0;
             transition: var(--transition);
             z-index: 1;
+            box-shadow: var(--shadow);
         }
         .gallery-item:hover .zoom-icon {
             opacity: 1;
@@ -402,7 +410,7 @@
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(26, 29, 26, 0.97);
+            background: rgba(30, 41, 59, 0.97);
             z-index: 2000;
             align-items: center;
             justify-content: center;
@@ -431,14 +439,14 @@
             transition: var(--transition);
         }
         .lightbox-close:hover {
-            background: var(--accent-caramel);
+            background: var(--accent);
         }
         .lightbox-close {
             -webkit-tap-highlight-color: transparent;
         }
         .lightbox-close:active {
             transform: scale(0.9);
-            background: var(--accent-caramel);
+            background: var(--accent);
         }
         @media (max-width: 992px) {
             .gallery-grid { grid-template-columns: repeat(2, 1fr); }
@@ -451,7 +459,7 @@
 
         /* === Секция "Меню" === */
         .menu {
-            background-color: var(--bg-section);
+            background: var(--bg-section);
         }
 
         .menu-categories {
@@ -463,20 +471,20 @@
         }
 
         .cat-btn {
-            padding: 12px 25px;
+            padding: 10px 22px;
             background-color: var(--bg-card);
-            color: var(--text-muted);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 50px;
+            color: var(--text-primary);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
             cursor: pointer;
             transition: var(--transition);
             font-weight: 500;
             touch-action: manipulation;
         }
         .cat-btn.active, .cat-btn:hover {
-            background-color: var(--accent-caramel);
+            background-color: var(--accent);
             color: var(--white);
-            border-color: var(--accent-caramel);
+            border-color: var(--accent);
         }
         .cat-btn:active {
             transform: scale(0.96);
@@ -489,15 +497,54 @@
             gap: 30px;
         }
 
+        /* Анимация метеоров (эффект из Meteors component) */
+        @keyframes meteor-effect {
+            0% { transform: rotate(215deg) translateX(0); opacity: 1; }
+            70% { opacity: 1; }
+            100% { transform: rotate(215deg) translateX(-500px); opacity: 0; }
+        }
+        .menu-card-meteor {
+            position: absolute;
+            top: 0;
+            width: 2px;
+            height: 2px;
+            border-radius: 9999px;
+            background: rgba(148, 163, 184, 0.9);
+            box-shadow: 0 0 0 1px rgba(255,255,255,0.06);
+            transform: rotate(215deg);
+            animation: meteor-effect 5s linear infinite;
+            pointer-events: none;
+        }
+        .menu-card-meteor::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+            width: 50px;
+            height: 1px;
+            background: linear-gradient(to right, rgba(100, 116, 139, 0.8), transparent);
+            pointer-events: none;
+        }
+        .menu-card-meteors {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: 1;
+        }
         .menu-card {
+            position: relative;
             background: var(--bg-card);
-            border-radius: 14px;
+            border-radius: 16px;
             padding: 26px;
             box-shadow: var(--shadow);
-            border-top: 4px solid var(--accent-caramel);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-top: 4px solid var(--accent);
             transition: var(--transition);
             display: flex;
             flex-direction: column;
+            overflow: hidden;
         }
         .menu-card:hover {
             transform: translateY(-8px);
@@ -511,6 +558,11 @@
             transition-duration: 0.1s;
         }
 
+        .menu-card-content {
+            position: relative;
+            z-index: 2;
+            padding: 0;
+        }
         .menu-card h3 {
             display: flex;
             justify-content: space-between;
@@ -518,12 +570,9 @@
             margin-bottom: 15px;
             color: var(--text-primary);
         }
-
-        .menu-card-content {
-            padding: 0;
-        }
         .menu-card-img {
             position: relative;
+            z-index: 2;
             width: 100%;
             aspect-ratio: 4/3;
             border-radius: 10px 10px 0 0;
@@ -561,12 +610,12 @@
             right: 10px;
             width: 36px;
             height: 36px;
-            background: rgba(26, 29, 26, 0.7);
-            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--text-primary);
+            color: #fff;
             font-size: 0.9rem;
             opacity: 0;
             transition: var(--transition);
@@ -581,9 +630,9 @@
         }
 
         .price {
-            color: var(--accent-warm);
+            color: var(--accent);
             font-weight: 700;
-            font-size: 1.3rem;
+            font-size: 1.2rem;
         }
 
         /* === Секция "Контакты" === */
@@ -595,11 +644,11 @@
         }
 
         .contacts {
-            background-color: var(--bg-dark);
+            background: var(--bg-section);
         }
         .contact-info h3 {
             margin-top: 30px;
-            color: var(--accent-warm);
+            color: var(--accent);
         }
         .contact-info h3:first-child { margin-top: 0;}
 
@@ -612,7 +661,7 @@
         .contact-detail i {
             width: 40px;
             font-size: 1.3rem;
-            color: var(--accent-caramel);
+            color: var(--accent);
         }
 
         .contact-info p { color: var(--text-muted); }
@@ -627,18 +676,19 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 50px;
-            height: 50px;
-            background-color: var(--green-accent);
+            width: 48px;
+            height: 48px;
+            background-color: var(--bg-section);
             color: var(--text-primary);
-            border-radius: 50%;
-            font-size: 1.3rem;
+            border-radius: 10px;
+            font-size: 1.25rem;
             transition: var(--transition);
             text-decoration: none;
         }
         .social-links a:hover {
-            background-color: var(--accent-caramel);
-            transform: translateY(-5px);
+            background-color: var(--accent);
+            color: var(--white);
+            transform: translateY(-3px);
         }
         .social-links a {
             -webkit-tap-highlight-color: transparent;
@@ -657,9 +707,9 @@
 
         /* === Подвал === */
         footer {
-            background-color: var(--green-dark);
-            color: var(--text-primary);
-            padding: 60px 0 30px;
+            background: rgba(0, 0, 0, 0.5);
+            color: #fff;
+            padding: 56px 0 28px;
         }
 
         .footer-content {
@@ -670,20 +720,20 @@
         }
 
         .footer-logo {
-            font-size: 2rem;
+            font-size: 1.75rem;
             font-weight: 700;
-            margin-bottom: 20px;
-            color: var(--text-primary);
+            margin-bottom: 16px;
+            color: #fff;
         }
 
         .footer-about p {
-            color: var(--text-muted);
+            color: rgba(255, 255, 255, 0.9);
         }
 
         .footer-links h4, .footer-hours h4 {
-            color: var(--accent-warm);
-            margin-bottom: 25px;
-            font-size: 1.3rem;
+            margin-bottom: 20px;
+            font-size: 1.15rem;
+            color: rgba(255, 255, 255, 0.95);
         }
 
         .footer-links ul {
@@ -691,12 +741,12 @@
         }
         .footer-links li { margin-bottom: 12px;}
         .footer-links a {
-            color: var(--text-muted);
+            color: rgba(255, 255, 255, 0.85);
             text-decoration: none;
             transition: var(--transition);
         }
         .footer-links a:hover {
-            color: var(--accent-caramel);
+            color: var(--accent-light);
             padding-left: 5px;
         }
         .footer-links a {
@@ -707,15 +757,15 @@
         }
 
         .footer-hours p {
-            color: var(--text-muted);
+            color: rgba(255, 255, 255, 0.85);
         }
 
         .copyright {
             text-align: center;
-            padding-top: 30px;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            color: var(--text-muted);
-            font-size: 0.95rem;
+            padding-top: 28px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
         }
 
         /* === Адаптивность (мобильные устройства) === */
@@ -770,6 +820,9 @@
     </style>
 </head>
 <body>
+    <div class="site-bg" aria-hidden="true"></div>
+    <div class="site-grain" aria-hidden="true"></div>
+    <div class="site-overlay" aria-hidden="true"></div>
     <!-- Шапка с навигацией -->
     <header>
         <nav>
@@ -795,11 +848,9 @@
 
     <!-- Главная герой-секция -->
     <section class="hero" id="home">
-        <div class="hero-bg" aria-hidden="true"></div>
-        <div class="hero-overlay" aria-hidden="true"></div>
         <div class="container">
             <h1>Ваш уютный уголок в центре Костромы</h1>
-            <p>Место, где рождается лучший кофе, где можно поработать, встретиться с друзьями или просто насладиться моментом. Добро пожаловать в КОФЕРУМ на Советской, 40.</p>
+            <p>КОФЕРУМ — уютная кофейня для работы и отдыха, прекрасное место для встреч и общения. Ароматный кофе высшего качества, свежайшие круассаны и десерты, дружелюбные бариста и стильный интерьер. Единственное заведение в Костроме с примесью звёзд и астрологии: каждый день — персональные подсказки от вселенной от профессионального астролога. Здесь гости не просто пьют кофе — получают знаки судьбы, заряжаются позитивом и становятся частью волшебного мира.</p>
             <div class="hero-btns">
                 <a href="#menu" class="btn">Смотреть меню</a>
                 <a href="#contacts" class="btn">Как добраться</a>
@@ -811,10 +862,16 @@
     <section class="about" id="about">
         <div class="container">
             <div class="about-text">
-                <h2>Наша философия</h2>
-                <p>КОФЕРУМ — это больше, чем просто кофейня. Это пространство, созданное для людей, которые ценят атмосферу, качество и внимание к деталям.</p>
-                <p>Мы тщательно отбираем зёрна, готовим каждый напиток с заботой и создали интерьер, в котором хочется оставаться. Быстрый Wi-Fi, удобные розетки и тихая музыка — здесь есть всё для продуктивной работы.</p>
-                <p>Наше центральное расположение на ул. Советской делает нас идеальной точкой для встреч, а наше гостеприимство — причиной возвращаться снова.</p>
+                <h2>О нас</h2>
+                <p>КОФЕРУМ — это уютная кофейня для работы и отдыха, прекрасное место для встреч и общения.</p>
+                <ul style="margin: 1rem 0 1rem 1.2rem; color: var(--text-muted);">
+                    <li>Варят ароматный кофе высшего качества</li>
+                    <li>Подают свежайшие круассаны и десерты</li>
+                    <li>Встречают гостей дружелюбные бариста</li>
+                    <li>Радует глаз эстетичный и стильный интерьер</li>
+                </ul>
+                <p>Единственное заведение в Костроме с примесью звёзд и астрологии: каждый день — персональные подсказки от вселенной от профессионального астролога. У нас гости не просто пьют кофе — получают знаки судьбы, заряжаются позитивом и становятся частью волшебного мира.</p>
+                <p><strong>Удобства:</strong> еда навынос, оплата картой, наличными и по QR-коду, Wi‑Fi, кофе с собой, завтраки. Летняя веранда, можно с ноутбуком, с собаками до 35 см. Для курьеров: чай, кофе, зарядка, WC. Парковка, туалет.</p>
                 <a href="#contacts" class="btn" style="margin-top: 20px;">Приходите в гости</a>
             </div>
             <div class="about-img">
@@ -844,10 +901,13 @@
             <div class="menu-categories">
                 <button class="cat-btn active" data-category="all">Всё меню</button>
                 <button class="cat-btn" data-category="food">Еда</button>
-                <button class="cat-btn" data-category="coffee">Кофе</button>
                 <button class="cat-btn" data-category="author">Авторские напитки</button>
+                <button class="cat-btn" data-category="classic">Классика</button>
+                <button class="cat-btn" data-category="coffee">Кофейные напитки</button>
+                <button class="cat-btn" data-category="no-coffee">Не кофе</button>
+                <button class="cat-btn" data-category="sweet-tea">Сладкий чай</button>
+                <button class="cat-btn" data-category="icecream">Крафтовое мороженое</button>
                 <button class="cat-btn" data-category="tea">Чай</button>
-                <button class="cat-btn" data-category="dessert">Десерты</button>
             </div>
 
             <div class="menu-items" id="menuItemsContainer">
@@ -866,10 +926,9 @@
                     <p class="contact-detail"><i class="fas fa-location-dot"></i> г. Кострома, ул. Советская, д. 40</p>
                     <p>Мы находимся в самом сердце города, рядом с главными достопримечательностями. Идеальное место, чтобы сделать паузу во время прогулки.</p>
 
-                    <h3><i class="fas fa-clock"></i> График работы</h3>
-                    <p class="contact-detail"><i class="far fa-clock"></i> Будни: 9:00–20:00</p>
-                    <p class="contact-detail"><i class="far fa-clock"></i> Суббота: 10:00–21:00</p>
-                    <p class="contact-detail"><i class="far fa-clock"></i> Воскресенье: 10:00–21:00</p>
+                    <h3><i class="fas fa-clock"></i> Режим работы</h3>
+                    <p class="contact-detail"><i class="far fa-clock"></i> пн–пт: 9:00–20:00</p>
+                    <p class="contact-detail"><i class="far fa-clock"></i> сб–вс: 10:00–21:00</p>
                     <p>В праздничные дни график может меняться. Следите за анонсами в наших соцсетях.</p>
 
                     <h3><i class="fas fa-phone"></i> Телефон</h3>
@@ -899,7 +958,7 @@
             <div class="footer-content">
                 <div class="footer-about">
                     <div class="footer-logo"><i class="fas fa-coffee"></i> КОФЕРУМ</div>
-                    <p>Уютная кофейня в самом центре Костромы. Качество, атмосфера и гостеприимство — наши главные ингредиенты.</p>
+                    <p>Уютная кофейня для работы и отдыха в Костроме. Кофе высшего качества, астрология и знаки судьбы каждый день.</p>
                 </div>
                 <div class="footer-links">
                     <h4>Навигация</h4>
@@ -912,10 +971,9 @@
                     </ul>
                 </div>
                 <div class="footer-hours">
-                    <h4>Часы работы</h4>
-                    <p>Будни: 9:00–20:00</p>
-                    <p>Суббота: 10:00–21:00</p>
-                    <p>Воскресенье: 10:00–21:00</p>
+                    <h4>Режим работы</h4>
+                    <p>пн–пт: 9:00–20:00</p>
+                    <p>сб–вс: 10:00–21:00</p>
                     <p>Будем рады видеть вас!</p>
                 </div>
             </div>
@@ -947,6 +1005,7 @@
          * 5. Можно добавлять и удалять строки — фильтры по категориям подстроятся.
          */
         const menuData = [
+            /* Еда */
             { name: "Круасан с фасолью", description: "Слоёная выпечка с фасолью.", price: "420 ₽", category: "food", image: "menu/0.png" },
             { name: "Сырники с вареньем и сметаной", description: "Подаются с вареньем и сметаной.", price: "280 ₽", category: "food", image: "menu/1.png" },
             { name: "Поке с курицей", description: "Паровой рис, куриная грудка, маринованная в соевом соусе и обжаренная в темпуре, бобы эдамаме, огурец, помидоры черри, зелёный лук, кунжут, соус сладкий чили.", price: "450 ₽", category: "food", image: "menu/2.png" },
@@ -956,28 +1015,35 @@
             { name: "Блины с форелью", description: "Блины классические с форелью и творожным сыром.", price: "420 ₽", category: "food", image: "menu/6.png" },
             { name: "Каша овсяная", description: "Подаётся с грецким орехом, голубикой и мёдом.", price: "320 ₽", category: "food", image: "menu/7.png" },
             { name: "Каша рисовая", description: "Подаётся с вишнёвым вареньем и лепестками миндаля.", price: "320 ₽", category: "food", image: "menu/8.png" },
-            { name: "Ореховый Сатурн", description: "Раф с урбечем. Глубокий, структурный, с ореховой строгостью и внутренним теплом.", price: "380 ₽", category: "author", image: "menu/9.png" },
-            { name: "Сладкая сила Венеры", description: "Малиновый латте. Нежный, уютный и чуть ностальгический.", price: "300 ₽", category: "author", image: "menu/venus.png" },
-            { name: "Огненный Стрелец", description: "Глинтвейн с пряностями. Теплый, щедрый и чуть дерзкий.", price: "400 ₽", category: "author", image: "menu/10.png" },
-            { name: "Солнечный взрыв", description: "Цитрусовый пунш. Яркий и бодрящий.", price: "400 ₽", category: "author", image: "menu/11.png" },
-            { name: "Луна в Деве", description: "Чай яблоко-шалфей. Уют, аромат и спокойствие.", price: "400 ₽", category: "author", image: "menu/12.png" },
-            { name: "Эспрессо", description: "Классический крепкий кофе.", price: "160 ₽", category: "coffee", image: "menu/13.png" },
-            { name: "Американо", description: "Эспрессо с добавлением горячей воды.", price: "160 ₽", category: "coffee", image: "menu/14.png" },
-            { name: "Капучино", description: "Эспрессо с молочной пенкой.", price: "200 ₽", category: "coffee", image: "menu/15.png" },
-            { name: "Латте", description: "Кофе с большим количеством молока.", price: "260 ₽", category: "coffee", image: "menu/16.png" },
-            { name: "Флэт уайт", description: "Двойной эспрессо с микропенной молочной пенкой.", price: "270 ₽", category: "coffee", image: "menu/17.png" },
+            /* Авторские напитки */
+            { name: "Ореховый Сатурн", description: "Раф с урбечем. Глубокий, структурный, с ореховой строгостью и внутренним теплом. Энергия: стабильность и спокойная сила.", price: "380 ₽", category: "author", image: "menu/9.png" },
+            { name: "Сладкая сила Венеры", description: "Малиновый латте. Нежный, уютный и чуть ностальгический. Энергия: тепло, забота, сладость момента.", price: "300 ₽", category: "author", image: "menu/venus.png" },
+            { name: "Огненный Стрелец", description: "Глинтвейн с пряностями. Теплый, щедрый и чуть дерзкий. Энергия: приключения и уверенность.", price: "400 ₽", category: "author", image: "menu/10.png" },
+            { name: "Солнечный взрыв", description: "Цитрусовый пунш. Яркий и бодрящий, как новая идея. Энергия: драйв и мотивация.", price: "400 ₽", category: "author", image: "menu/11.png" },
+            { name: "Луна в Деве", description: "Чай яблоко-шалфей. Уют, аромат и спокойствие. Энергия: порядок, забота о себе, гармония.", price: "400 ₽", category: "author", image: "menu/12.png" },
+            /* Классика */
+            { name: "Эспрессо", description: "Классический крепкий кофе.", price: "160 ₽", category: "classic", image: "menu/13.png" },
+            { name: "Американо", description: "Эспрессо с добавлением горячей воды.", price: "160 ₽", category: "classic", image: "menu/14.png" },
+            { name: "Капучино", description: "Эспрессо с молочной пенкой.", price: "200 ₽", category: "classic", image: "menu/15.png" },
+            { name: "Латте", description: "Кофе с большим количеством молока.", price: "260 ₽", category: "classic", image: "menu/16.png" },
+            { name: "Флэт уайт", description: "Двойной эспрессо с микропенной молочной пенкой.", price: "270 ₽", category: "classic", image: "menu/17.png" },
+            /* Кофейные напитки */
             { name: "Бамбл с апельсиновым соком", description: "Эспрессо и апельсиновый сок со льдом.", price: "300 ₽", category: "coffee", image: "menu/18.png" },
             { name: "Раф Ваниль", description: "Кофейный напиток со сливками и ванильным сиропом.", price: "280 ₽", category: "coffee", image: "menu/19.png" },
             { name: "Раф Прага", description: "Авторский раф с шоколадом и сливками.", price: "320 ₽", category: "coffee", image: "menu/20.png" },
             { name: "Эспрессо-тоник", description: "Эспрессо с тоником и льдом.", price: "300 ₽", category: "coffee", image: "menu/21.png" },
             { name: "Аффогато черничное", description: "Мороженое с горячим эспрессо и черничным соусом.", price: "280 ₽", category: "coffee", image: "menu/22.png" },
-            { name: "Какао", description: "Горячий шоколадный напиток.", price: "220 ₽", category: "author", image: "menu/23.png" },
-            { name: "Матча-латте", description: "Напиток на основе зелёного чая матча и молока.", price: "350 ₽", category: "author", image: "menu/24.png" },
-            { name: "Бэйби Раф", description: "Молочный напиток без кофе для детей.", price: "150 ₽", category: "author", image: "menu/25.png" },
-            { name: "Молочный коктейль", description: "Классический молочный коктейль.", price: "300 ₽", category: "author", image: "menu/26.png" },
-            { name: "Облепиховый", description: "Сладкий чай с облепихой.", price: "260 ₽", category: "tea", image: "menu/27.png" },
-            { name: "Манго-гречиха", description: "Сладкий чай с манго и гречишным чаем.", price: "240 ₽", category: "tea", image: "menu/28.png" },
-            { name: "Крафтовое мороженое", description: "Куки монстр / Малиновый чизкейк / Фисташка / Б-52 (18+) / Клубничная маргарита (18+).", price: "200 ₽", category: "dessert", image: "menu/29.png" },
+            /* Не кофе */
+            { name: "Какао", description: "Горячий шоколадный напиток.", price: "220 ₽", category: "no-coffee", image: "menu/23.png" },
+            { name: "Матча-латте", description: "Напиток на основе зелёного чая матча и молока.", price: "350 ₽", category: "no-coffee", image: "menu/24.png" },
+            { name: "Бэйби Раф", description: "Молочный напиток без кофе для детей.", price: "150 ₽", category: "no-coffee", image: "menu/25.png" },
+            { name: "Молочный коктейль", description: "Классический молочный коктейль.", price: "300 ₽", category: "no-coffee", image: "menu/26.png" },
+            /* Сладкий чай */
+            { name: "Облепиховый", description: "Сладкий чай с облепихой.", price: "260 ₽", category: "sweet-tea", image: "menu/27.png" },
+            { name: "Манго-гречиха", description: "Сладкий чай с манго и гречишным чаем.", price: "240 ₽", category: "sweet-tea", image: "menu/28.png" },
+            /* Крафтовое мороженое */
+            { name: "Крафтовое мороженое", description: "Куки монстр / Малиновый чизкейк / Фисташка / Б-52 (18+) / Клубничная маргарита (18+).", price: "200 ₽", category: "icecream", image: "menu/29.png" },
+            /* Чай */
             { name: "Чай", description: "Чёрный / Лесные ягоды / Молочный улун / Сенча / Липовый / Гречишный.", price: "180 ₽", category: "tea", image: "menu/30.png" }
         ];
 
@@ -1038,7 +1104,29 @@
             }
         }
 
-        // Функция отрисовки карточек меню (с фото и лайтбоксом по клику)
+        // Эффект метеоров для карточек (как в Meteors component)
+        function addMeteorsToCard(card, number) {
+            number = number || 18;
+            var meteorsWrap = document.createElement('div');
+            meteorsWrap.className = 'menu-card-meteors';
+            meteorsWrap.setAttribute('aria-hidden', 'true');
+            for (var i = 0; i < number; i++) {
+                var m = document.createElement('span');
+                m.className = 'menu-card-meteor';
+                var left = Math.floor(Math.random() * 801) - 400;
+                var delay = (Math.random() * 0.6 + 0.2).toFixed(2);
+                var duration = Math.floor(Math.random() * 8 + 2);
+                var top = Math.random() * 100;
+                m.style.left = left + 'px';
+                m.style.top = top + '%';
+                m.style.animationDelay = delay + 's';
+                m.style.animationDuration = duration + 's';
+                meteorsWrap.appendChild(m);
+            }
+            card.insertBefore(meteorsWrap, card.firstChild);
+        }
+
+        // Функция отрисовки карточек меню (с фото, лайтбоксом и метеорами)
         function renderMenuItems(category) {
             const container = document.getElementById('menuItemsContainer');
             container.innerHTML = '';
@@ -1055,6 +1143,7 @@
                     ? '<div class="menu-card-img"><img src="' + item.image.replace(/"/g, '&quot;') + '" alt="' + item.name.replace(/"/g, '&quot;') + '" loading="lazy" onerror="this.parentElement.style.display=\'none\'"><span class="menu-card-zoom" aria-hidden="true"><i class="fas fa-search-plus"></i></span></div>'
                     : '';
                 card.innerHTML = imgBlock + '<div class="menu-card-content"><h3>' + item.name + ' <span class="price">' + item.price + '</span></h3><p>' + item.description + '</p></div>';
+                addMeteorsToCard(card, 18);
                 container.appendChild(card);
                 if (hasImg) {
                     const imgEl = card.querySelector('.menu-card-img img');
