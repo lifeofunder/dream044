@@ -151,6 +151,42 @@ body::before {
   color: var(--md-sys-color-on-surface);
 }
 
+.header-menu-btn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: none;
+  border-radius: var(--md-shape-corner-full);
+  background: transparent;
+  color: var(--md-sys-color-on-surface);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.header-menu-btn:hover {
+  background: var(--md-sys-color-surface-container);
+}
+
+.header-menu-btn__icon {
+  position: absolute;
+  display: inline-flex;
+}
+
+.header-menu-btn__icon--close {
+  display: none;
+}
+
+.menu-open .header-menu-btn__icon--open {
+  display: none;
+}
+
+.menu-open .header-menu-btn__icon--close {
+  display: inline-flex;
+}
+
 .header-actions {
   display: flex;
   align-items: center;
@@ -191,7 +227,10 @@ body::before {
 
 @media (max-width: 600px) {
   .mdc-body {
-    padding-top: 108px;
+    padding-top: 56px;
+  }
+  .mdc-body.menu-open {
+    padding-top: 280px;
   }
   .mdc-top-app-bar {
     height: auto;
@@ -201,28 +240,44 @@ body::before {
   .header-inner {
     flex-wrap: wrap;
     padding: 8px 16px;
-    gap: 8px;
+    gap: 0;
     align-content: flex-start;
   }
   .logo {
     order: 1;
   }
-  .header-actions {
+  .header-menu-btn {
+    display: inline-flex;
     order: 2;
+    position: relative;
+  }
+  .header-actions {
+    order: 3;
   }
   .nav {
-    order: 3;
+    order: 4;
     width: 100%;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 6px;
-    padding-top: 4px;
-    border-top: 1px solid rgba(255, 255, 255, 0.3);
-    margin-top: 0;
+    display: none;
+    flex-direction: column;
+    gap: 0;
+    padding: 8px 0 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.35);
+    margin-top: 8px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.15) 0%, transparent 100%);
+    border-radius: 0 0 16px 16px;
+  }
+  .menu-open .nav {
+    display: flex;
   }
   .nav a {
-    padding: 6px 10px;
-    font-size: 13px;
+    display: block;
+    padding: 12px 16px;
+    font-size: 16px;
+    border-radius: 8px;
+    margin: 0 8px;
+  }
+  .nav a:hover {
+    background: rgba(255, 255, 255, 0.4);
   }
 }
 

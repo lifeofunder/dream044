@@ -15,7 +15,15 @@
   <header class="mdc-top-app-bar">
     <div class="container header-inner">
       <a href="#" class="logo">Dream</a>
-      <nav class="nav">
+      <button type="button" class="header-menu-btn" id="headerMenuBtn" aria-label="Открыть меню" aria-expanded="false">
+        <span class="header-menu-btn__icon header-menu-btn__icon--open" aria-hidden="true">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </span>
+        <span class="header-menu-btn__icon header-menu-btn__icon--close" aria-hidden="true">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </span>
+      </button>
+      <nav class="nav" id="headerNav">
         <a href="#directions">Направления</a>
         <a href="#products">Товары</a>
         <a href="#why">Почему мы</a>
@@ -248,9 +256,23 @@
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
       anchor.addEventListener('click', function(e) {
         e.preventDefault();
-        document.querySelector(this.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
+        var target = document.querySelector(this.getAttribute('href'));
+        if (target) target.scrollIntoView({ behavior: 'smooth' });
+        document.body.classList.remove('menu-open');
       });
     });
+
+    (function() {
+      var menuBtn = document.getElementById('headerMenuBtn');
+      if (menuBtn) {
+        menuBtn.addEventListener('click', function() {
+          document.body.classList.toggle('menu-open');
+          var open = document.body.classList.contains('menu-open');
+          menuBtn.setAttribute('aria-label', open ? 'Закрыть меню' : 'Открыть меню');
+          menuBtn.setAttribute('aria-expanded', open);
+        });
+      }
+    })();
 
     (function() {
       var galleryItems = [
