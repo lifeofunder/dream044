@@ -469,6 +469,9 @@ body::before {
 .btn-interactive {
   position: relative;
   overflow: hidden;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
   min-width: 200px;
   padding: 10px 20px;
   border: 1px solid var(--md-sys-color-outline);
@@ -497,7 +500,7 @@ body::before {
 
 .btn-interactive__text {
   display: inline-block;
-  transform: translateX(4px);
+  transform: translateX(0);
   transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
