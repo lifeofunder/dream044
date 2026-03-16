@@ -1087,45 +1087,97 @@ body::before {
   }
 }
 
-/* Мобильная версия — более плавные анимации блоков */
+/* Мобильная версия — оптимизация FPS и плавность анимаций */
 @media (max-width: 600px) {
-  .card,
+  /* Меньше размытия = выше FPS на слабых GPU */
+  .mdc-top-app-bar {
+    backdrop-filter: blur(10px) saturate(140%);
+    -webkit-backdrop-filter: blur(10px) saturate(140%);
+  }
+  .card {
+    backdrop-filter: blur(10px) saturate(140%);
+    -webkit-backdrop-filter: blur(10px) saturate(140%);
+    transition: background 0.35s ease-out;
+  }
   .card--hover:hover {
-    transition: box-shadow 0.5s ease-in-out, border-color 0.5s ease-in-out, background 0.5s ease-in-out;
+    transition: background 0.35s ease-out;
+  }
+  .bento-card {
+    backdrop-filter: blur(10px) saturate(140%);
+    -webkit-backdrop-filter: blur(10px) saturate(140%);
+    transition: background 0.35s ease-out;
+  }
+  .bento-card:hover {
+    transition: background 0.35s ease-out;
+  }
+  .contact-block {
+    backdrop-filter: blur(10px) saturate(140%);
+    -webkit-backdrop-filter: blur(10px) saturate(140%);
+  }
+  /* GPU-слои для анимируемых элементов (transform + opacity) */
+  .card__content,
+  .card-icon,
+  .card__cta {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
   }
   .card__content {
-    transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  .card--hover:hover .card__content {
+    transform: translate3d(0, -40px, 0);
   }
   .card-icon {
-    transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
   .card__cta {
-    transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.5s ease-in-out;
+    transform: translate3d(0, 40px, 0);
+    transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.4s ease-out;
   }
-  .bento-card,
-  .bento-card:hover {
-    transition: box-shadow 0.5s ease-in-out, border-color 0.5s ease-in-out, background 0.5s ease-in-out;
+  .card--hover:hover .card__cta {
+    transform: translate3d(0, 0, 0);
+  }
+  .bento-card__content,
+  .bento-card__icon,
+  .bento-card__cta {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
   }
   .bento-card__content {
-    transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  .bento-card:hover .bento-card__content {
+    transform: translate3d(0, -24px, 0);
   }
   .bento-card__icon {
-    transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
   .bento-card__cta {
-    transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.5s ease-in-out;
+    transform: translate3d(0, 32px, 0);
+    transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.4s ease-out;
+  }
+  .bento-card:hover .bento-card__cta {
+    transform: translate3d(0, 0, 0);
   }
   .bento-card__overlay {
-    transition: background 0.5s ease-in-out;
+    transition: opacity 0.35s ease-out;
   }
   .gallery-carousel__slide {
-    transition: opacity 0.55s ease-in-out, transform 0.55s ease-in-out;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    transition: opacity 0.4s ease-out, transform 0.4s ease-out;
   }
+  .gallery-carousel__btn,
   .gallery-carousel__btn svg {
-    transition: transform 0.4s ease-in-out;
+    transform: translateZ(0);
+    transition: transform 0.3s ease-out;
   }
   .nav a {
-    transition: background 0.4s ease-in-out, border-color 0.4s ease-in-out, box-shadow 0.4s ease-in-out;
+    transform: translateZ(0);
+    transition: background 0.3s ease-out, box-shadow 0.3s ease-out;
   }
 }
 
