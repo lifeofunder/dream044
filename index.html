@@ -297,6 +297,7 @@
       var elPrice = document.getElementById("galleryPrice");
       var btnPrev = document.getElementById("galleryPrev");
       var btnNext = document.getElementById("galleryNext");
+      var elText = document.querySelector(".gallery-carousel__text");
 
       function renderImages() {
         if (!elImages) return;
@@ -341,8 +342,17 @@
         if (autoplay) timer = setInterval(goNext, autoplayInterval);
       }
 
-      if (btnNext) btnNext.addEventListener("click", function() { goNext(); startAutoplay(); });
-      if (btnPrev) btnPrev.addEventListener("click", function() { goPrev(); startAutoplay(); });
+      function stopAutoplay() {
+        autoplay = false;
+        if (timer) {
+          clearInterval(timer);
+          timer = null;
+        }
+      }
+
+      if (btnNext) btnNext.addEventListener("click", function() { goNext(); stopAutoplay(); });
+      if (btnPrev) btnPrev.addEventListener("click", function() { goPrev(); stopAutoplay(); });
+      if (elText) elText.addEventListener("scroll", stopAutoplay, { passive: true });
 
       renderImages();
       updateContent();
