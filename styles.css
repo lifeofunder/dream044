@@ -200,6 +200,8 @@ body::before {
   transition: background 0.2s;
   -webkit-tap-highlight-color: transparent;
   tap-highlight-color: transparent;
+  -webkit-appearance: none;
+  appearance: none;
 }
 
 .header-menu-btn:hover {
@@ -209,6 +211,8 @@ body::before {
 .header-menu-btn:active,
 .header-menu-btn:focus {
   outline: none;
+  background: transparent;
+  box-shadow: none;
 }
 
 .header-menu-btn__icon {
@@ -298,6 +302,11 @@ body::before {
     order: 2;
     position: relative;
   }
+  .header-menu-btn:active,
+  .header-menu-btn:focus {
+    background: transparent !important;
+    box-shadow: none !important;
+  }
   .header-actions {
     order: 3;
   }
@@ -309,13 +318,13 @@ body::before {
     z-index: 99;
     display: none;
     flex-direction: column;
-    gap: 12px;
+    gap: 14px;
     padding: 16px;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 245, 255, 0.95) 100%);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.6);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border: none;
+    box-shadow: none;
   }
   .menu-open .nav {
     display: flex;
@@ -332,7 +341,7 @@ body::before {
     background: rgba(248, 245, 255, 0.92);
     border: 1px solid rgba(103, 80, 164, 0.45);
     color: #5a4a8f;
-    box-shadow: 0 1px 3px rgba(103, 80, 164, 0.08);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15), 0 1px 3px rgba(103, 80, 164, 0.12);
     transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
     -webkit-tap-highlight-color: transparent;
     tap-highlight-color: transparent;
@@ -343,7 +352,7 @@ body::before {
   .nav a:hover {
     border-color: var(--md-sys-color-primary);
     background: rgba(252, 250, 255, 0.95);
-    box-shadow: 0 2px 8px rgba(103, 80, 164, 0.12);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.18), 0 2px 8px rgba(103, 80, 164, 0.15);
   }
 }
 
