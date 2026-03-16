@@ -1,16 +1,5 @@
-# Служебные папки ОС
-.DS_Store
-Thumbs.db
-desktop.ini
-
-# Редакторы и IDE
-.idea/
-.vscode/
-*.swp
-*.swo
-*~
-
-# Временные файлы
-*.tmp
-*.temp
+dream-next/
+node_modules/
+.next/
 *.log
+.DS_Store
