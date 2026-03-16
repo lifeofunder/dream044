@@ -499,7 +499,9 @@ body::before {
 }
 
 .btn-interactive__text {
-  display: inline-block;
+  display: block;
+  width: 100%;
+  text-align: center;
   transform: translateX(0);
   transition: transform 0.3s ease, opacity 0.3s ease;
 }
@@ -561,6 +563,14 @@ body::before {
 .btn-interactive .btn-interactive__hover {
   position: relative;
   z-index: 1;
+}
+
+.btn-interactive__hover {
+  pointer-events: none;
+}
+
+.btn-interactive:hover .btn-interactive__hover {
+  pointer-events: auto;
 }
 
 /* Sections */
